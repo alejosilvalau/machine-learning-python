@@ -14,3 +14,12 @@ model = nn.Sequential(
 output = model(input_data)
 print("Output probabilities:")
 print(output)
+
+# Output probabilities:
+# tensor([[0.1784, 0.5115, 0.3101],
+#         [0.3676, 0.3856, 0.2469],
+#         [0.3183, 0.2689, 0.4128],
+#         [0.2957, 0.4026, 0.3017],
+#         [0.3050, 0.3820, 0.3130]], grad_fn=<SoftmaxBackward0>)
+#
+# This means that rows 1, 2, 4 and 5 are one animal type. And the row 3 is another animal type.
