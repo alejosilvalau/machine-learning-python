@@ -1,6 +1,8 @@
 import torch
 import torch.nn as nn
 
+
+
 # Create input data of shape 5x6 (5 animals, 6 features)
 input_data = torch.tensor([
     [-0.4421,  1.5207,  2.0607, -0.3647,  0.4691,  0.0946],
