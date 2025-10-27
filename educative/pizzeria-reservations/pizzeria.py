@@ -19,7 +19,3 @@ plt.ylabel("Pizzas", fontsize=14)  # set y axis label
 X, Y = np.loadtxt(data_path, skiprows=1, unpack=True)  # load data
 plt.plot(X, Y, "bo")  # plot data
 plt.show()  # display chart
-
-
-def predict(X, w):
-    return X * w
