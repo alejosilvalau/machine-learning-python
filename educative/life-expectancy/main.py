@@ -25,7 +25,7 @@ def train(X, Y, iterations, lr):
 data_path = Path(__file__).parent / "life-expectancy-without-country-names.txt"
 if not data_path.exists():
     raise FileNotFoundError(
-        f"{data_path} not found. Put pizza.txt next to pizzeria.py or adjust the path."
+        f"{data_path} not found. Put life-expectancy-without-country-names.txt next to main.py or adjust the path."
     )
 
 x1, x2, x3, y = np.loadtxt(data_path, skiprows=1, unpack=True)
