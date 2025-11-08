@@ -7,7 +7,7 @@ def predict(X, w, b):
     return X * w + b
 
 
-# Calculatin the loss
+# Calculating the loss
 def loss(X, Y, w, b):
     return np.average((predict(X, w, b) - Y) ** 2)
 
