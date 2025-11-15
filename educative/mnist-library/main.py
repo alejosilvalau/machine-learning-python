@@ -37,23 +37,29 @@ def gradient(X, Y, w):
 def train(X, Y, iterations, lr):
     w = np.zeros((X.shape[1], 1))
     for i in range(iterations):
-        print("Iteration %4d => Loss: %.20f" % (i, loss(X, Y, w)))
+        # Commenting out this line to make the output more readable
+        # print("Iteration %4d => Loss: %.20f" % (i, loss(X, Y, w)))
         w -= gradient(X, Y, w) * lr
     return w
 
 
 # Doing inference to test our model
-def test(X, Y, w):
+def test(X, Y, w, digit):
     total_examples = X.shape[0]
     correct_results = np.sum(classify(X, w) == Y)
     success_percent = correct_results * 100 / total_examples
     print(
-        "\nSuccess: %d/%d (%.2f%%)" % (correct_results, total_examples, success_percent)
+        "Correct classifications for digit %d: %d/%d (%.2f%%)"
+        % (digit, correct_results, total_examples, success_percent)
     )
 
 
-# Test it
-import dataset as data
+# Test it after loading the data
+import mnist as data
 
-w = train(data.X_train, data.Y_train, iterations=100, lr=1e-5)
-test(data.X_test, data.Y_test, w)
+for digit in range(10):
+    w = train(data.X_train, data.Y_train[digit], iterations=100, lr=1e-5)
+    test(data.X_test, data.Y_test[digit], w, digit)
+
+# There is a problem with the dataset on the tensorflow library,
+# not solved yet. Causes PC freezing.

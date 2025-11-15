@@ -1,5 +1,3 @@
-# An MNIST loader.
-
 import numpy as np
 import gzip
 import struct
@@ -8,7 +6,7 @@ import struct
 def load_images(filename):
     # Open and unzip the file of images:
     with gzip.open(filename, "rb") as f:
-        # Read the header information into a bunch of variables
+        # Read the header information into a bunch of variables:
         _ignored, n_images, columns, rows = struct.unpack(">IIII", f.read(16))
         # Read all the pixels into a NumPy array of bytes:
         all_pixels = np.frombuffer(f.read(), dtype=np.uint8)
@@ -23,10 +21,14 @@ def prepend_bias(X):
 
 
 # 60000 images, each 785 elements (1 bias + 28 * 28 pixels)
-X_train = prepend_bias(load_images("../data/mnist/train-images-idx3-ubyte.gz"))
+X_train = prepend_bias(
+    load_images("../programming-machine-learning/data/mnist/train-images-idx3-ubyte.gz")
+)
 
 # 10000 images, each 785 elements, with the same structure as X_train
-X_test = prepend_bias(load_images("../data/mnist/t10k-images-idx3-ubyte.gz"))
+X_test = prepend_bias(
+    load_images("../programming-machine-learning/data/mnist/t10k-images-idx3-ubyte.gz")
+)
 
 
 def load_labels(filename):
@@ -40,14 +42,28 @@ def load_labels(filename):
         return np.frombuffer(all_labels, dtype=np.uint8).reshape(-1, 1)
 
 
-# Convert labels to binary: 1 if the digit is a five, 0 otherwise
-def encode_fives(Y):
-    # Convert all 5s to 1, and everything else to 0
-    return (Y == 5).astype(int)
+def encode_digit(Y, digit):
+    encoded_Y = np.zeros_like(Y)
+    n_labels = Y.shape[0]
+    for i in range(n_labels):
+        if Y[i] == digit:
+            encoded_Y[i][0] = 1
+    return encoded_Y
 
 
-# 60K labels, each with value 1 if the digit is a five, and 0 otherwise
-Y_train = encode_fives(load_labels("../data/mnist/train-labels-idx1-ubyte.gz"))
+TRAINING_LABELS = load_labels(
+    "../programming-machine-learning/data/mnist/train-labels-idx1-ubyte.gz"
+)
+TEST_LABELS = load_labels(
+    "../programming-machine-learning/data/mnist/t10k-labels-idx1-ubyte.gz"
+)
 
-# 10000 labels, with the same encoding as Y_train
-Y_test = encode_fives(load_labels("../data/mnist/t10k-labels-idx1-ubyte.gz"))
+# Load a list of 10 training sets and a matching list of 10 testing sets, each
+# encoding one digit.
+
+Y_train = []
+Y_test = []
+
+for digit in range(10):
+    Y_train.append(encode_digit(TRAINING_LABELS, digit))
+    Y_test.append(encode_digit(TEST_LABELS, digit))
