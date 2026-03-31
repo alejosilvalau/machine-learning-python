@@ -1,15 +1,14 @@
-from torch.utils.data import TensorDataset
-from torch.utils.data import DataLoader
-from torch import nn
-import torch
 import numpy as np
 import pandas as pd
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, TensorDataset
 
 # Load data
-data_science_salary = pd.read_csv('data_science_salary_dataset.csv')
+data_science_salary = pd.read_csv("data_science_salary_dataset.csv")
 
 # Extract features and target
-features = data_science_salary.iloc[:, 1: -1]
+features = data_science_salary.iloc[:, 1:-1]
 target = data_science_salary.iloc[:, -1]
 
 # Convert DataFrame to numpy arrays first, then to PyTorch tensors
@@ -24,17 +23,10 @@ print(f"Number of features: {num_features}")
 # Create the dataset and the dataloader
 dataset = TensorDataset(features_tensor, target_tensor)
 
-dataloader = DataLoader(
-  dataset,
-  batch_size=4,
-  shuffle=True
-)
+dataloader = DataLoader(dataset, batch_size=4, shuffle=True)
 
 # Create the model with correct input dimensions
-model = nn.Sequential(
-  nn.Linear(num_features, 2),
-  nn.Linear(2, 1)
-)
+model = nn.Sequential(nn.Linear(num_features, 2), nn.Linear(2, 1))
 
 # Create the loss function and the optimizer
 criterion = nn.MSELoss()
@@ -44,27 +36,27 @@ num_epochs = 1000
 
 # Training loop
 for epoch in range(num_epochs):
-  loss = None  
-  for data in dataloader:
-    # Zero the gradients
-    optimizer.zero_grad()
+    loss = None
+    for data in dataloader:
+        # Zero the gradients
+        optimizer.zero_grad()
 
-    # Get features and labels for this batch
-    features_batch, labels_batch = data
+        # Get features and labels for this batch
+        features_batch, labels_batch = data
 
-    # Forward pass
-    predictions = model(features_batch)
+        # Forward pass
+        predictions = model(features_batch)
 
-    # Calculate the loss and gradients
-    loss = criterion(predictions, labels_batch.view(-1, 1)) 
-    loss.backward()
-    
-    # Update the model parameters
-    optimizer.step()
-    
-  # Print progress every 100 epochs
-  if (epoch + 1) % 100 == 0 and loss is not None:
-    print(f"Epoch {epoch+1}/{num_epochs}, Loss: {loss.item():.4f}")
+        # Calculate the loss and gradients
+        loss = criterion(predictions, labels_batch.view(-1, 1))
+        loss.backward()
+
+        # Update the model parameters
+        optimizer.step()
+
+    # Print progress every 100 epochs
+    if (epoch + 1) % 100 == 0 and loss is not None:
+        print(f"Epoch {epoch+1}/{num_epochs}, Loss: {loss.item():.4f}")
 
 print("Training complete.")
 # Print the final model parameters
@@ -74,7 +66,7 @@ for name, param in model.named_parameters():
         print(f"{name}: {param.data.numpy()}")
 
 
-''' Output:
+""" Output:
 Features shape: torch.Size([5, 3])
 Number of features: 3
 Epoch 100/1000, Loss: 0.0010
@@ -96,4 +88,5 @@ Model parameters after training:
 1.weight: [[-0.38825056  0.19231708]]
 1.bias: [0.3155515]
 (.venv) 
-'''
+"""
+
